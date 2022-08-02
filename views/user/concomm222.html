@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var art=[]
+        var commcon=[]
+        var ctime=[]
+        var uname=[]
+        var article=[]
+        
+//<%article.forEach(art=>{%>
+  //  <%=art.id%>
+   // <%=art.title%>
+  
+    //<%})%>
+   <%article.forEach(art=>{%>
+    try{
+art.push("<%=art.title%>")
+article.push("<%=art.id%>")
+    }
+    catch{
+
+    }
+    <%})%>
+<%comments.forEach(con=>{%>
+   
+try {
+    commcon.push("<%=con.Ctxt%>")
+    ctime.push("<%=con.Ctime%>")
+    uname.push("<%=con.Uname%>")
+    
+    
+}
+catch(err) {
+   console.log(err)
+}
+    
+  //  <%=con.Ctxt%>
+   // <%=con.CID%>
+
+    <%})%>
+    console.log(commcon)
+    
+    console.log(ctime)
+    console.log(uname)
+    console.log(art)
+    console.log(article)
+//<%=user.id%>
+        </script>
+</body>
+</html>
+
+

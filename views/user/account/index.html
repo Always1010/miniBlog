@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+    <script src="/vue.js"></script>
+    <script src="/layui/jquery-3.6.0.js"></script>
+    
+    
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>首页</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1658828_vud4w73neg.css">
+    <link rel="stylesheet" href="/admin/css/style.css">
+</head>
+
+<body class="bg-light"style="background: url('/1.jpeg'); background-repeat: no-repeat; background-attachment: fixed;">
+    <%- include('../header.html')  -%>
+
+    <div id="h233" class="container-fluid vh-100"style='opacity: 0.8;'>
+        <div class="row h-100">
+            <%- include('../navs.html') -%>
+            <div class="col-10">
+                <div class="p-3 border mb-3 bg-white">
+                    <h4 class="mb-0">账户管理</h4>
+                </div>
+                <div class="row mt-3">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white d-flex justify-content-between">
+                                <h6 class="mb-0 align-self-center">个人信息</h6>
+                            </div>
+                           
+                            <div class="card-body">
+                                <form action="/login/send" type="" method="post">
+                                    <div class="form-row">
+                                        <label for="title" class="col-2 text-center col-form-label">登录账号：</label>
+                                        <input type="text" class="col-8 form-control" name="title" id="title":readonly="is" placeholder="<%=user.username%>"required>
+                                        
+                                    </div>
+                                    <div class="form-row mt-3">
+                                        <label for="category_id" class="col-2 text-center col-form-label">登录密码：</label>
+                                        <input type="password" class="col-8 form-control" name="password" id="password"placeholder="****"
+                                        :readonly=is      required>
+                                    </div>
+                                    <div class="form-row mt-3">
+                                        <label for="category_id" class="col-2 text-center col-form-label">个人邮箱：</label>
+                                        <input type="text" class="col-8 form-control" name="Email" id="Email"placeholder="<%=user.Uemail%>"
+                                        :readonly=is    required>
+                                    </div>
+                                    <div class="form-row mt-3">
+                                        <label for="category_id" class="col-2 text-center col-form-label">生日：</label>
+                                        <input type="text" class="col-8 form-control" name="birth" id="birthe"placeholder="<%=user.Ubirth%>"
+                                        :readonly=is   required>
+                                    </div>
+                                    <div class="form-row mt-3">
+                                        <label for="category_id" class="col-2 text-center col-form-label">手机号码：</label>
+                                        <input type="text" class="col-8 form-control" name="phone" id="phone"placeholder="<%=user.Uphone%>"
+                                        :readonly=is   required>
+                                    </div>
+                                    <div class="form-row mt-3">
+                                        <label for="category_id" class="col-2 text-center col-form-label">年龄：</label>
+                                        <input type="text" class="col-8 form-control" name="age" id="age"placeholderS="<%=user.Uage%>"
+                                        :readonly=is   required>
+                                    </div>
+                                     <!--div class="form-row mt-3">
+                                        <label for="content" class="col-2 text-center col-form-label">个人头像</label>
+                                        <div class="col-8">
+                                            <input type="file" class="d-none" id="customFile" name="logo"
+                                                accept="image/*">
+                                            <label for="customFile" class="position-relative">
+                                                <img src="/admin/img/logo.png" data-src="holder.js/200x200?text=点击上传"
+                                                    class="img-thumbnail" width="200" height="200">
+                                                <button type="button"
+                                                    class="delimg btn btn-danger btn-sm position-absolute"
+                                                    title="删除">&times;</button>
+                                            </label> </div>
+                                        </div>
+                                    </div-->
+                                    <input type="radio" name="sex" value="<%=user.username%>" id='username11'  style="visibility:hidden"checked>
+                                        <div class="offset-2">
+                                            
+                                            <button id="yuy" onclick="return ww()"type="button" value="保存" class="btn btn-success">保存</button>
+                                            <button id="but1" type="button" value="编辑" @click='wwwww' class="btn btn-success">编辑</button>
+                                            <!-- <button type="button" value="编辑" @click='qwq' class="btn btn-success">取消</button> -->
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/layui/jquery-3.6.0.js"></script>
+    <script src="/layui/layui.js"></script>
+    <script>
+        console.log(1)
+        function ww(){
+            console.log(1)
+        var title=$('#title')[0].value
+        console.log(title)
+        var password=$('#password')[0].value
+        var Email=$('#Email')[0].value
+        var birt=$('#birthe')[0].value
+        var phone=$('#phone')[0].value
+        var age=$('#age')[0].value
+        var oldusername=$('#username11')[0].value
+        console.log(title,password,Email,birt,phone,age,oldusername)
+        $.post('/login/send',{
+            // title:title,
+            // password:password,
+            // Email:Email,
+            // // birth:birt,
+            // age:age,
+            phone:phone,
+            old:oldusername
+        },function (res) {
+                 layer.msg('修改成功')
+                 location.reload();
+             })
+            }
+        
+       /* $('#yuy')[0].click(()=>{
+                console.log(1)
+        var title=$('#title')[0].value
+        console.log(title)
+        var password=$('#password')[0].value
+        var Email=$('#Email')[0].value
+        var birt=$('#birthe')[0].value
+        var phone=$('#phone')[0].value
+        var age=$('#age')[0].value
+        var oldusername=$('#username11')[0].value
+        console.log(title,password,Email,birt,phone,age,oldusername)
+        $.post('/login/send',{
+            title:title,
+            password:password,
+            Email:Email,
+            birth:birt,
+            age:age,
+            phone:phone,
+            old:oldusername
+        },function(data,status){
+            console.log("1")
+        //6666666666666dioge无敌
+
+        })
+            }
+        )*/
+        var UOP63=new Vue({
+            el:"#h233",
+            data:{
+                is:true
+            },
+            methods:{
+                wwwww:function(){
+                    console.log("11111")
+                 var btnVal=document.getElementById("but1");
+                    this.is=!this.is
+                    if(!this.is){
+                        btnVal.innerHTML="取消"
+                        console.log("11131")
+                    }
+                    else {
+                        btnVal.innerHTML="编辑"
+                        console.log("11112")
+                    }
+                },
+                qwq:()=>{
+                    location.reload();
+                }
+            }
+            
+        })
+
+
+
+
+        
+         </script>
+    <script src="/layui/jquery-3.6.0.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.6/holder.min.js"></script>
+    <script src="https://gw.alipayobjects.com/os/lib/antv/g2/3.5.12/dist/g2.min.js"></script>
+    <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.data-set-0.10.2/dist/data-set.min.js"></script>
+    <script src="/admin/ueditor/ueditor.config.js"></script>
+    <script src="/admin//ueditor/ueditor.all.min.js"></script>
+    <script src="/admin/js/public.js"></script>
+</body>
+
+</html>

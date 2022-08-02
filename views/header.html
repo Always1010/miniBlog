@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>文章详情页</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            border-style:none;
+        }
+        #tet:hover{
+            border:1px solid blue;
+
+
+        }
+        .bg-dark{
+            background-color: aliceblue;
+        }
+        </style>
+    
+</head>
+
+<body class="bg-light"">
+    <script src="/layui/layui.js"></script>
+    <!--nav class="navbar navbar-fixed-top navbar-transparent" role="navigation"-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color:rgba(255, 255, 255, 100)">
+    <!--nav class="navbar fixed-top navbar-expand-lg navbar-dark p-md-3"-->
+        <a class="navbar-brand" href="#">
+            <img src="/img/logo.png" width="30" height="30" alt="">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav" style="	overflow:hidden;">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">首页</a>
+                </li>
+                <% categories.forEach(category => { %>
+                <li class="nav-item">
+                    <a class="nav-link" href="/article/list/<%=category.id%>"><%= category.name %> </a>
+                </li>
+                <% }) %>
+            </ul>
+            <form class="form-inline my-2 my-lg-0 ml-5" method="get" action='/search'>
+                <input class="form-control mr-sm-2" name="keyword" type="search" placeholder="请输入关键词...">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+            </form>
+            <ul class="navbar-nav ml-auto">
+                <% if (user.id!==-1) { %>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">
+                            <%=user.username%>
+                        </a>
+                        <img src="/背景图/003.jpg" style=" border-radius: 15px; width:30px; height:30px; position: absolute;right:90px;bottom:4px; ">
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <%if(user.username==="admin"){%>
+                                <a class="dropdown-item" href="/admin">个人中心</a>
+                                
+                                <% }else {%>
+                                    <a class="dropdown-item" href="/user/index">个人中心</a> 
+                                <%}%>
+                            <a class="dropdown-item" href="/user/logout">退出</a>
+                        </div>
+                    </li>
+                    <% } else { %>
+                    <li class="nav-item">
+                        <div style=" float:right;">
+                        <a href="/login" class="nav-link">登录</a>
+                    </div>
+                        <div style=" float:right;">
+                        <a href="/regiter" class="nav-link" >注册</a>
+                        </div>
+                        
+                    </li>
+                    <% } %>
+            </ul>
+        </div>
+    </nav>

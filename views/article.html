@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+    <script src="/layui/jquery-3.6.0.js"></script>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>文章详情页</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            border-style:none;
+        }
+        #tet:hover{
+            border:1px solid blue;
+
+
+        }
+        .bg-dark{
+            background-color: aliceblue;
+        }
+        </style>
+    
+</head>
+
+<body class="bg-light"  >
+    <script src="/layui/layui.js"></script>
+    <!--nav class="navbar navbar-fixed-top navbar-transparent" role="navigation"-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color:rgba(255, 255, 255, 100)">
+    <!--nav class="navbar fixed-top navbar-expand-lg navbar-dark p-md-3"-->
+        <a class="navbar-brand" href="#">
+            <img src="/img/logo.png" width="30" height="30" alt="">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav" style="	overflow:hidden;">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">首页</a>
+                </li>
+                <% categories.forEach(category => { %>
+                <li class="nav-item">
+                    <a class="nav-link" href="/article/list/<%=category.id%>"><%= category.name %> </a>
+                </li>
+                <% }) %>
+            </ul>
+            <form class="form-inline my-2 my-lg-0 ml-5" method="get" action='/search'>
+                <input class="form-control mr-sm-2" name="keyword" type="search" placeholder="请输入关键词...">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+            </form>
+            <ul class="navbar-nav ml-auto">
+                <% if (user.id!==-1) { %>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">
+                            <%=user.username%>
+                        </a>
+                        <img src="/背景图/003.jpg" style=" border-radius: 15px; width:30px; height:30px; position: absolute;right:90px;bottom:4px; ">
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <%if(user.username==="admin"){%>
+                                <a class="dropdown-item" href="/admin">个人中心</a>
+                                
+                                <% }else {%>
+                                    <a class="dropdown-item" href="/user/index">个人中心</a> 
+                                <%}%>
+                            <a class="dropdown-item" href="/user/logout">退出</a>
+                        </div>
+                    </li>
+                    <% } else { %>
+                    <li class="nav-item">
+                        <div style=" float:right;">
+                        <a href="/login" class="nav-link">登录</a>
+                    </div>
+                        <div style=" float:right;">
+                        <a href="/regiter" class="nav-link" >注册</a>
+                        </div>
+                        <!--  -->
+                    </li>
+                    <% } %>
+            </ul>
+        </div>
+    </nav>
+    
+<script type="text/javascript">    
+
+    document.onkeydown=keyDownSearch;
+    
+    function keyDownSearch(e) {  
+        // 兼容FF和IE和Opera  
+        var theEvent = e || window.event;  
+        var code = theEvent.keyCode || theEvent.which || theEvent.charCode;  
+        if (code == 13) {  
+            document.getElementById("tyt").click();            //具体处理函数  
+            return false;  
+        }  
+        return true;  
+    }
+</script>
+<script>
+    //回复文章
+    $(document).ready(function () {
+        $("#tyt").click(function () {
+            if(document.getElementById('navbarDropdown')){
+            var str = $("#navbarDropdown")[0].innerHTML
+            str = str.replace(/\ +/g, "");
+
+            //"{'retmsg':'success',
+            //'trans_date':'20170906'}"
+                   // console.log(str)
+                
+
+            //去掉回车换行        
+            str = str.replace(/[\r\n]/g, "");
+            var content = $("#tet")[0].value
+            //console.log(content)
+            $.post("/comment/send", {
+                user: str,
+                user_id:"<%=user.id%>",
+                conn: content,
+                article_id1:"<%=article.id%>",
+                article_id:"<%=article.title%>",
+                Ctime:(new Date()).valueOf(),
+                isroot:true,
+                isfather:false,
+                root:-1,
+                father:-1
+
+
+            },
+             function (data, status) {
+                
+                
+                layer.msg("发送成功")
+                setTimeout(location.reload(),500)
+
+            }
+            ,)}
+            else{
+                layer.msg("请先登录再发送评论")
+            }
+
+        })
+    })
+    var a
+ /*  $(document).ready(function(){
+        $('#tyt1').click(function(){
+            if(document.getElementById('navbarDropdown')){
+            var str = $("#navbarDropdown")[0].innerHTML
+            str = str.replace(/\ +/g, "");
+
+            //"{'retmsg':'success',
+            //'trans_date':'20170906'}"
+                    console.log(str)
+                
+
+            //去掉回车换行        
+            str = str.replace(/[\r\n]/g, "");
+            var content = $("#tet1")[0].value
+            console.log(content)
+            var isflag=true
+            $.post("/comment/send", {
+                user: str,
+                conn: content,
+              
+              
+                ischild:isflag,
+                father:,
+                time:Date(),
+                art_id:<%=article.id%>,
+              
+
+
+
+            },
+             function (data, status) {
+                console.log(data)
+                
+                layer.msg("发送成功")
+                setTimeout("location.reload()",500)
+
+            })}
+            else{
+                layer.msg("请先登录再发送评论")
+            }})
+       
+    })*/
+
+    $(document).ready(function () {
+        $(".www1").click(function () {
+            var test="<div style='position:relative; left:210px;  top:5px'><textarea cols='130' name='msg' rows='5' id='tet1' placeholder='&ensp;发一条友善的评论'style='border-radius: 10px; background-color:#d1d7e2'></textarea><button id='tyt1' onclick=''style='background-color:#00A1D6; border-radius: 8px; height:90px; width:100px; position: relative; bottom:38px; color:#F4F5F7'>发送</button></div>"
+            console.log(1)
+            $("footer").before(test)
+            
+            $(this).attr('disabled',true);
+            a=$(this)
+          //  a=this
+          var root=a.parent().prev().children().attr('cid')
+            console.log(a)
+            //this.after("<div style='position:relative; left:210px;  top:5px'><textarea cols='130' name='msg' rows='5' id='tet' placeholder='发一条友善的评论'style='border-radius: 10px; background-color:#d1d7e2'></textarea><button id='tyt' onclick=''style='background-color:#00A1D6; border-radius: 8px; height:90px; width:100px; position: relative; bottom:38px; color:#F4F5F7'>发送</button></div>")
+           setTimeout((console.log(1)),500)
+        $('#tyt1').click(function(){
+            if(document.getElementById('navbarDropdown')){
+            var str = $("#navbarDropdown")[0].innerHTML
+            str = str.replace(/\ +/g, "");
+
+            //"{'retmsg':'success',
+            //'trans_date':'20170906'}"
+                  //  console.log(str)
+                
+
+            //去掉回车换行        
+            str = str.replace(/[\r\n]/g, "");
+            var content = $("#tet1")[0].value
+           // console.log(content)
+            var ischild=true
+            $.post("/comment/send", {
+                user: str,
+                conn: content,
+                user_id:"<%=user.id%>",
+                article_id1:"<%=article.id%>",
+                article_id:"<%=article.title%>",
+                Ctime:(new Date()).valueOf(),
+                isroot:false,
+                isfather:true,
+                root:root,
+                father:root
+
+                
+
+
+            /*   user: str,
+                conn: content,
+                ischild:isflag,
+                father:,
+                time:Date(),
+                art_id:<%=article.id%>,
+                     user_id:<%=user.id%>
+                */
+              
+
+
+
+            },
+             function (data, status) {
+                 
+             
+                
+                layer.msg("发送成功")
+                setTimeout(location.reload(),500)
+
+            })}
+            else{
+                layer.msg("请先登录再发送评论")
+            }})
+       
+   
+
+        })
+    })
+    //子评论回复
+    $(document).ready(function () {
+        $(".www2").click(function () {
+            var test="<div style='position:relative; left:210px;  top:5px'><textarea cols='130' name='msg' rows='5' id='tet2' placeholder='&ensp;发一条友善的评论'style='border-radius: 10px; background-color:#d1d7e2'></textarea><button id='tyt2' onclick=''style='background-color:#00A1D6; border-radius: 8px; height:90px; width:100px; position: relative; bottom:38px; color:#F4F5F7'>发送</button></div>"
+            console.log(1)
+            $("footer").before(test)
+            
+            $(this).attr('disabled',true);
+            a=$(this)
+          //  a=this
+          var father=a.parent().prev().children()[2].getAttribute('cid')
+          var root=a.parent().prev().children()[2].getAttribute('rid')
+            console.log(a)
+            //this.after("<div style='position:relative; left:210px;  top:5px'><textarea cols='130' name='msg' rows='5' id='tet' placeholder='发一条友善的评论'style='border-radius: 10px; background-color:#d1d7e2'></textarea><button id='tyt' onclick=''style='background-color:#00A1D6; border-radius: 8px; height:90px; width:100px; position: relative; bottom:38px; color:#F4F5F7'>发送</button></div>")
+           setTimeout((console.log(1)),500)
+        $('#tyt2').click(function(){
+            if(document.getElementById('navbarDropdown')){
+            var str = $("#navbarDropdown")[0].innerHTML
+            str = str.replace(/\ +/g, "");
+
+            //"{'retmsg':'success',
+            //'trans_date':'20170906'}"
+                  //  console.log(str)
+                
+
+            //去掉回车换行        
+            str = str.replace(/[\r\n]/g, "");
+            var content = $("#tet2")[0].value
+           // console.log(content)
+            var ischild=true
+            $.post("/comment/send", {
+                user: str,
+                conn: content,
+                user_id:"<%=user.id%>",
+                article_id1:"<%=article.id%>",
+                article_id:"<%=article.title%>",
+                Ctime:(new Date()).valueOf(),
+                isroot:false,
+                isfather:false,
+                root:root,
+                father:father
+            },
+             function(data,status) {
+                layer.msg("发送成功")
+                setTimeout(location.reload(),500)
+
+            })}
+            else{
+                layer.msg("请先登录再发送评论")
+            }})
+       
+   
+
+        })
+    })
+</script>
+
+<div class="container mt-4" style='opacity: 0.85;'>
+    <nav>
+        <ol class="breadcrumb bg-white">
+            <li class="breadcrumb-item"><a href="/">首页</a></li>
+            <li class="breadcrumb-item"><a href="/article/list/<%=article.category_id%>"><%=article.name%></a></li>
+            <li class="breadcrumb-item active"><%=article.title%></li>
+        </ol>
+    </nav>
+    <div class="card content">
+        <div class="card-header bg-white">
+            <h3 class="card-title m-0"><%=article.title%></h3>
+
+            <p class="text-muted small mt-2 m-0">
+                <span class="mr-3">作者:<%=article.username%></span>
+                <span class="mr-3">发表时间：<%=article.time.toLocaleString()%></span>
+                <span class="mr-1">点击：<%=article.hits%></span>
+
+            </p>
+            <img src="<%=article.thumbnail %> " style="heigth:500px;width:500px">
+        </div>
+        <div class="card-body"><%-article.content%></div>
+        <div class="card-footer bg-white border-0">
+            <% tabs.forEach(tab => { %>
+            <span class="badge badge-pill"><%=tab.name%> </span>
+            <% }) %>
+        </div>
+    </div>
+    <nav>
+        <ul class="pagination mt-3">
+            <% if (prev) { %>
+            <li class="page-item">
+                <a class="page-link" href="/article/<%=prev.id%>">上一篇：<%=prev.title%></a>
+            </li>
+            <% } %>
+            <% if (next) { %>
+            <li class="page-item ml-auto">
+                <a class="page-link" href="/article/<%=next.id%>">下一篇：<%=next.title%></a>
+            </li>
+            <% } %>
+        </ul>
+    </nav>
+</div>
+<div style="position:relative; left:210px;  top:5px">
+    <textarea cols="137" name="msg" rows="5" id='tet' placeholder="&ensp;发一条友善的评论"
+        style="border-radius: 10px; background-color:#d1d7e2"></textarea>
+    <button id="tyt" onclick=""
+        style="background-color:#00A1D6; border-radius: 8px; height:90px; width:100px; position: relative; bottom:38px; color:#F4F5F7">
+        发送</button>
+</div>
+
+
+<!--//!你直接对着这里的文本改成循环就可以-->
+<script>
+    function FDate(date) {
+    const arr = date.split('T');
+    const d = arr[0];
+    const darr = d.split('-');
+
+    const t = arr[1];
+    const tarr = t.split('.000');
+    const marr = tarr[0].split(':');
+
+    const dd =
+      parseInt(darr[0]) +
+      '-' +
+      parseInt(darr[1]) +
+      '-' +
+      parseInt(darr[2]) +
+      ' ' +
+      parseInt(marr[0]) +
+      ':' +
+      parseInt(marr[1]) +
+      ':' +
+      parseInt(marr[2]);
+    return dd;
+}
+
+
+    var flag=0
+    </script>
+        
+<%comments.forEach(tab => { if(tab.Rid===tab.CID){%>            
+    <hr style="position: relative;
+    left:180px;
+    border: none;
+    height: 1px;
+    background: #7c8bd1;" width="1200"></hr>
+<img src="/背景图/003.jpg" style=" border-radius: 15px; position: relative; width:30px; height:30px; right:90px;bottom:4px; left:150px">
+<div style="position:relative; left:200px;bottom:40px;">
+    <script>
+        flag=1
+        console.log(flag)
+    </script>
+    <div>
+        
+        <P style="color:#6D757A"><%=tab.Uname%></P>
+    </div>
+    <div>
+        <p CID="<%=tab.CID%>"><%=tab.Ctxt%>
+        </p>
+    </div>
+    <div style="font-size: small; color:#C4ABAA">
+        <span>   <%=tab.Ctime%>
+    
+    </span>
+        <!--span> &ensp;like</span-->
+        <!--span> 3</span-->
+        
+         <button class="www1"  style="font-size: small; color:#C4ABAA" >&ensp;回复</button>
+    </div>
+    <%comments.forEach(tab1 => { if(tab1.Rid===tab.CID&&tab1.Fid!==tab1.CID){%> 
+        <div style="position: relative; left:30px">
+            <img src="/背景图/003.jpg" style=" border-radius: 13px; position: absolute; width:26px; height:26px; right:90px;bottom:4px;left:-40px">
+            <div >
+                <div>
+                    <p style="color:#6D757A; float:left"><%=tab1.Uname%>:</p> 
+                    <p style="color:rgb(97, 145, 234);float:left">@<%=tab1.RUname%>:</p>
+                    <P CID="<%=tab1.CID%>" RID="<%=tab1.Rid%>"><%=tab1.Ctxt%></p></div>
+                <div style="font-size: small; color:#C4ABAA">
+                    <span > <%=tab.Ctime%></span>
+                    <!--span> &ensp;like</span-->
+                      <!--span> 3</span-->
+                      <button class="www2" style="font-size: small; color:#C4ABAA" >&ensp;回复</button>
+                  </div>
+               
+            </div>
+        </div>
+        
+        
+        <%}%>
+        <% }) %>
+        </div>
+    </div>
+   
+    
+   </div>
+<%}%>
+<% }) %>
+<div id="帅">
+    <h1 id="hhhh" style="font-size: small; position: relative; left:650px">
+        </h1>
+</div>
+<script>
+  if(flag===0){
+    var t = document.getElementById('hhhh');
+  //  t.style.width='300px';
+ // 将盒子的样式中的高度设置为300像素
+ //t.style.height='300px';
+ 
+ // 将盒子的样式中的背景色设置橘黄色
+ //t.style.background='orange'; 
+ t.innerHTML='评论区空空如也,快来评论吧'
+console.log('确实没评论')
+  }
+    </script>
+
+<!--//!你直接对着这里的文本改成循环就可以-->
+
+<%- include('footer.html')  -%>
