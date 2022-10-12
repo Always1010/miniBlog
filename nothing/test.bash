@@ -1,2 +1,0 @@
-ww=$(whoami)
-echo $ww
