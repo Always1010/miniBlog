@@ -26,8 +26,10 @@ articleApp.get('/list/:id', [article.getListByCategoryId, category.getCategoryBy
 // })
 
 // 文章详情页
-articleApp.get('/:id', [article.getArticleById, article.getTabs, article.getPrev ,article.getNext,article.getComments,article.addHit], (req, res) => {
+articleApp.get('/:id', [article.getArticleById, article.getTabs1, article.getPrev ,article.getNext,article.getComments,article.addHit], (req, res) => {
     let { article, categories, tabs, prev, next1, user, comments } = req
+   
+    console.log(tabs)
     /*let sql = 'UPDATE article set hits=hits+1 where( article.id=?);'
             this.query(sql, id).then(results => {
                 resolve(results[0])

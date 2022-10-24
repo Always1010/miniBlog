@@ -122,6 +122,7 @@ module.exports = class Log extends require('./model') {
             //console.log(159753)
             this.query(sql, [artilce_id]).then(results => {
                 //console.log(159753)
+                console.log(results)
                 resolve(results)
                 //console.log(results)
             }).catch(err => {

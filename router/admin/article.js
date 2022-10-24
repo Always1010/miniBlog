@@ -64,7 +64,13 @@ articleApp.post('/ckeditor', (req, res) => {
         })
     }
 })
-
+articleApp.post('/addtab', article.addtab, (req, res) => {
+    if (req.insertId) {
+        res.json({ code: 1, msg: '添加成功' })
+    } else {
+        res.json({ code: 0, msg: '添加失败' })
+    }
+})
 // 添加文章
 articleApp.post('/add', [article.add, category.getList], (req, res) => {
     let { user, categories } = req
@@ -74,6 +80,7 @@ articleApp.post('/add', [article.add, category.getList], (req, res) => {
         res.render('admin/article/add', { user: user, categories: categories, code: 2 })
     }
 })
+
 
 // 删除文章
 articleApp.get('/del', article.del, (req, res) => {
@@ -97,27 +104,30 @@ articleApp.post('/edit', article.edit, (req, res) => {
         res.render('admin/alert', { code: true, title: '失败提示', message: '文章编辑失败', url: '/admin/article/edit/' + req.body.id })
     }
 })
-
+articleApp.get('/tab', Auth.getUser, category.getList, article.user_getlist, article.getTabs, (req, res) => {
+   
+    let { articles,tabs, user ,categories} = req
+  
+    let { id } = req.query
+    res.render('admin/tab', { articles:articles,categories: categories,tabs:tabs,user:user,id:id })
+    console.log(article)
+})
+articleApp.get('/deltab', article.deltab, (req, res) => {
+    if (req.affectedRows > 0) {
+        res.json({ code: 1, msg: '删除成功' })
+    } else {
+        res.json({ colde: 2, msg: '删除失败' })
+    }
+})
 
 // 加载评论管理
 articleApp.get('/concomm',Auth.getUser, category.getList, article.user_getlist, Comment.getComm,(req, res) => {
    
     let { articles, comments, user ,categories} = req
-     console.log("收到")
-    //console.log(req.articles)
-    //console.log(req.comments)
+
     let { id } = req.query
-    //console.log(req.user)
-    /****article={id,title}*******/
-    /****comments={CID ,Ctxt,Fid ,Rid ,Uid ,RUid,Uname ,RUname ,Ctime}*******/
-
-    //let { category_id, hot } = req.query
-
-    //page.list = pageList
     res.render('admin/concomm', { articles:articles,categories: categories,comments:comments,user:user,id:id })
-    //res.send()
     console.log(article)
-    //console.log(comments)
 })
 
 module.exports = articleApp

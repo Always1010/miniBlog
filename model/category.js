@@ -55,6 +55,7 @@ module.exports = class Category extends require('./model') {
         return new Promise((resolve, reject) => {
             let sql = 'INSERT INTO category (`name`,`index`) VALUES (?,?)'
             this.query(sql, [name, index]).then(results => {
+                console.log(sql)
                 resolve(results.insertId)
             }).catch(err => {
                 console.log(`新增类目失败：${err.message}`)

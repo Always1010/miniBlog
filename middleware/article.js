@@ -270,7 +270,10 @@ module.exports = {
      * 获取指定文章的标签列表
      */
     getTabs: (req, res, next) => {
-        let id = req.params.id
+        let id = req.query.id
+        console.log(`id1为${id}`)
+        if (id === undefined) { id = 0 }
+        console.log(`id为${id}`)
         Tab.getListByArticleId(id).then(results => {
             req.tabs = results
             next()
@@ -278,6 +281,26 @@ module.exports = {
             next(err)
         })
     },
+    getTabs1: (req, res, next) => {
+        let id = req.params.id
+        console.log(`id1为${id}`)
+        if (id === undefined) { id = 0 }
+        console.log(`id为${id}`)
+        Tab.getListByArticleId(id).then(results => {
+            req.tabs = results
+            next()
+        }).catch(err => {
+            next(err)
+        })
+    },
+    deletetab:(req,res,next)=> {
+        let id = req.params.id
+        Tab.deletetabbyId(id).then(results => {
+            next()
+        }).catch(err => {
+            next(err)
+        })
+        },
     /**
      * 上一篇文章
      */
@@ -325,6 +348,7 @@ module.exports = {
             next(err)
         })
     },
+    
     /**
      * 设置热门推荐
      */
@@ -340,6 +364,15 @@ module.exports = {
     /**
      * 添加文章
      */
+    addtab: (req, res, next) => {
+        let { name, article_id } = req.body
+        Tab.addtab(name, article_id).then(results => {
+            req.insertId = results
+            next()
+        }).catch(err => {
+            next(err)
+        })
+    },
     add: (req, res, next) => {
         let { title, content, hot, category_id } = req.body
         let article = {
@@ -364,6 +397,15 @@ module.exports = {
     del: (req, res, next) => {
         let { id } = req.query
         Article.del(id).then(results => {
+            req.affectedRows = results
+            next()
+        }).catch(err => {
+            next(err)
+        })
+    },
+    deltab: (req, res, next) => {
+        let { id } = req.query
+        Tab.deletetabbyId(id).then(results => {
             req.affectedRows = results
             next()
         }).catch(err => {

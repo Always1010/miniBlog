@@ -11,7 +11,7 @@ const loginApp = express()
 
 // 加载登录页
 loginApp.get('/', (req, res) => {
-    res.render('login', { msg: '' })
+    res.render('login', { msg: '0' })
 })
 loginApp.post('/send', (req,res, next) => {
     console.log("bug")
@@ -40,13 +40,16 @@ loginApp.post('/', (req, res, next) => {
                 ip: req.ip.split(':')[3]
             }
             log.add(req, res, next)
+           // console.log(username)
             // session存储（key=value）
             req.session.user = result
             res.redirect('/')
         } else {
+            console.log('yes')
             res.render('login', { msg: 1 })
         }
     }).catch(err => {
+       
         next(err)
     })
 })
